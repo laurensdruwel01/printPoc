@@ -1,0 +1,40 @@
+<html>
+<body>
+convert docx to pdf
+<iframe id="printIframe" height="0" width="0" ></iframe>
+</body>
+</html>
+<script>
+
+
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+var urlencoded = new URLSearchParams();
+urlencoded.append("filename", "testdoc.docx");
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: urlencoded,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:8081/convertFile", requestOptions)
+  .then(response => response.text())
+  .then(result => createIframe(result))
+  .catch(error => console.log('error', error));
+
+function createIframe(result){
+	console.log(result);
+	if(result == "OK"){
+		setTimeout(() => {  
+		var ifrm = document.getElementById('printIframe');
+		ifrm.setAttribute('src', 'http://localhost:3333/output.pdf');
+		setTimeout(() => {ifrm.contentWindow.print();}, 200);
+		 }, 200);
+		
+	}
+}
+
+</script>
